@@ -6,7 +6,7 @@ homepage:
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=1.10.0"
 
 dependencies:
   flutter:
@@ -28,7 +28,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.zendesk_flow_builder
+        package: com.aragoncs.zendesk_flow_builder
         pluginClass: ZendeskFlowBuilderPlugin
       ios:
         pluginClass: ZendeskFlowBuilderPlugin

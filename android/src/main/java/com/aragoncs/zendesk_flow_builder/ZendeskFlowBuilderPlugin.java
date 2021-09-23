@@ -1,4 +1,4 @@
-package com.example.zendesk_flow_builder;
+package com.aragoncs.zendesk_flow_builder;
 
 import androidx.annotation.NonNull;
 
@@ -19,8 +19,22 @@ public class ZendeskFlowBuilderPlugin implements FlutterPlugin, MethodCallHandle
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "zendesk_flow_builder");
+    channel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "zendesk_flow_builder");
     channel.setMethodCallHandler(this);
+  }
+
+  // This static function is optional and equivalent to onAttachedToEngine. It supports the old
+  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
+  // plugin registration via this function while apps migrate to use the new Android APIs
+  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
+  //
+  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
+  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
+  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
+  // in the same class.
+  public static void registerWith(Registrar registrar) {
+    final MethodChannel channel = new MethodChannel(registrar.messenger(), "zendesk_flow_builder");
+    channel.setMethodCallHandler(new ZendeskFlowBuilderPlugin());
   }
 
   @Override
