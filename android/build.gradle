@@ -5,10 +5,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.6.1'
     }
 }
 
@@ -16,6 +17,7 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
     }
 }
 
@@ -25,9 +27,24 @@ android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 18
     }
     lintOptions {
         disable 'InvalidPackage'
     }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    dependencies {
+        api group: 'com.zopim.android', name: 'sdk', version: '1.4.4'
+        implementation 'androidx.annotation:annotation:1.1.0'
+        implementation ("zendesk.messaging:messaging-android:1.1.0"){
+            exclude group:'org.jetbrains.kotlinx',module:'kotlinx-coroutines-core-jvm'
+        }
+    }
+
 }
