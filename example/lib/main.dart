@@ -15,11 +15,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  ZendeskFlowBuilder builder=ZendeskFlowBuilder();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -50,13 +50,22 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: FlatButton(
-            child: Text('Click to Start'),
-            color: Colors.blueAccent,
-            textColor: Colors.white,
-            onPressed: () {
-              startZendesk();
-            },
+          child: Column(
+            children: <Widget>[
+              InkWell(
+                child: Text("click to init"),
+                onTap: (){
+                  builder.init("accountKey", "channelKey",department: "department",appName: "appName");
+                },
+              ),
+              Padding(padding: EdgeInsets.only(top: 30)),
+              InkWell(
+                child: Text("start"),
+                onTap: (){
+                  builder.startChat();
+                },
+              ),
+            ],
           ),
         ),
       ),
