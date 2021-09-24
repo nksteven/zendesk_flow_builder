@@ -34,10 +34,10 @@
              }];
     result(@(true));
   } else if ([@"setVisitorInfo" isEqualToString:call.method]) {
-      NSString *email = call.arguments[@"email"];
-      NSString *phoneNumber = call.arguments[@"phoneNumber"];
-      NSString *name = call.arguments[@"name"];
-      NSString *note = call.arguments[@"note"];
+//      NSString *email = call.arguments[@"email"];
+//      NSString *phoneNumber = call.arguments[@"phoneNumber"];
+//      NSString *name = call.arguments[@"name"];
+//      NSString *note = call.arguments[@"note"];
 
 //      ZDKChatAPIConfiguration *chatAPIConfiguration = [[ZDKChatAPIConfiguration alloc] init];
 //      chatAPIConfiguration.department = @"";
@@ -61,18 +61,25 @@
   } else if ([@"startChat" isEqualToString:call.method]) {
       NSNumber *navigationBarColor = call.arguments[@"iosNavigationBarColor"];
       NSNumber *navigationTitleColor = call.arguments[@"iosNavigationTitleColor"];
-
-
+      UIColor *navigationTitleUIColor;
 
       UINavigationController *navVc = [[UINavigationController alloc] init];
       navVc.navigationBar.translucent = NO;
       if ([navigationBarColor isKindOfClass:[NSNumber class]]) {
           navVc.navigationBar.barTintColor = ARGB_COLOR([navigationBarColor integerValue]);//
+      } else {
+          navVc.navigationBar.barTintColor = [UIColor colorWithRed:245.0/255.0 green:245.0/255.0 blue:245.0/255.0  alpha:1.0];//
       }
       
       if ([navigationTitleColor isKindOfClass:[NSNumber class]]) {
+          navigationTitleUIColor = ARGB_COLOR([navigationBarColor integerValue]);
           navVc.navigationBar.titleTextAttributes = @{
                                                                NSForegroundColorAttributeName: ARGB_COLOR([navigationTitleColor integerValue])
+                                                               };
+      } else {
+          navigationTitleUIColor = UIColor.blackColor;
+          navVc.navigationBar.titleTextAttributes = @{
+                                                               NSForegroundColorAttributeName: UIColor.blackColor
                                                                };
       }
 
@@ -110,7 +117,7 @@
                                                                                       style:UIBarButtonItemStylePlain
                                                                                      target:self
                                                                                      action:@selector(close:)];
-          [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: ARGB_COLOR([navigationTitleColor integerValue])} forState:UIControlStateNormal];
+          [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: navigationTitleUIColor} forState:UIControlStateNormal];
 
           navVc.topViewController.navigationItem.leftBarButtonItem = back;
 

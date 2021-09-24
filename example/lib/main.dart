@@ -55,14 +55,14 @@ class _MyAppState extends State<MyApp> {
               InkWell(
                 child: Text("click to init"),
                 onTap: (){
-                  builder.init("accountKey", "channelKey",department: "department",appName: "appName");
+                  builder.init("accountKey", ZendeskChannelKey,department: "department",appName: "appName");
                 },
               ),
               Padding(padding: EdgeInsets.only(top: 30)),
               InkWell(
                 child: Text("start"),
                 onTap: (){
-                  builder.startChat();
+                  startChat();
                 },
               ),
             ],
@@ -83,9 +83,9 @@ void startZendesk() {
   });
 }
 
-const ZendeskAccountKey = '4xQg2Wm6BGdGOtWGPhb2dCGUAj9ShaFw';
+const ZendeskAccountKey = '';
 const ZendeskChannelKey =
-    'eyJzZXR0aW5nc191cmwiOiJodHRwczovL250Zm9vZHMuemVuZGVzay5jb20vbW9iaWxlX3Nka19hcGkvc2V0dGluZ3MvMDFGQ044WFhQUTIxS1k1RTJBUVhLNTRQSDEuanNvbiJ9';
+    '';
 final ZendeskFlowBuilder zendesk = ZendeskFlowBuilder();
 
 Future<void> initZendesk({String defaultInputFieldValue = ""}) async {
@@ -126,4 +126,11 @@ Future<void> initZendesk({String defaultInputFieldValue = ""}) async {
       });
     });
   });
+}
+
+void startChat() {
+  zendesk
+      .startChat(
+      iosNavigationBarColor: Color.fromRGBO(245, 245, 245, 255),
+      iosNavigationTitleColor: Colors.black);
 }
