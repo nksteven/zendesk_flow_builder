@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await ZendeskFlowBuilder.platformVersion;
+      platformVersion = '1.0.0';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -50,9 +50,71 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: FlatButton(
+            child: Text('Click to Start'),
+            color: Colors.blueAccent,
+            textColor: Colors.white,
+            onPressed: () {
+              startZendesk();
+            },
+          ),
         ),
       ),
     );
   }
+}
+
+void startZendesk() {
+  initZendesk();
+
+  zendesk.startChat().then((r) {
+    print('startChat finished');
+  }).catchError((e) {
+    print('error $e');
+  });
+}
+
+const ZendeskAccountKey = '4xQg2Wm6BGdGOtWGPhb2dCGUAj9ShaFw';
+const ZendeskChannelKey =
+    'eyJzZXR0aW5nc191cmwiOiJodHRwczovL250Zm9vZHMuemVuZGVzay5jb20vbW9iaWxlX3Nka19hcGkvc2V0dGluZ3MvMDFGQ044WFhQUTIxS1k1RTJBUVhLNTRQSDEuanNvbiJ9';
+final ZendeskFlowBuilder zendesk = ZendeskFlowBuilder();
+
+Future<void> initZendesk({String defaultInputFieldValue = ""}) async {
+  zendesk
+      .init(
+    ZendeskAccountKey,
+    ZendeskChannelKey,
+    department: 'Staging Part',
+    appName: 'NTFoods App',
+  )
+      .then((r) {
+    zendesk.addUnreadListener((count) {});
+  }).catchError((e) {
+    print('failed with error $e');
+  });
+
+  String username = "test";
+  String email = "test";
+  String phoneNumber = "test";
+  String firebaseToken = "FCMTOKEN";
+  zendesk
+      .setVisitorInfo(
+          email: email, name: username, phoneNumber: phoneNumber, note: '')
+      .then((r) {
+    print('setVisitorInfo finished');
+  }).catchError((e) {
+    print('failed with error $e');
+  }).whenComplete(() {
+    zendesk.setToken(firebaseToken).whenComplete(() {
+      zendesk
+          .startChat(
+              iosNavigationBarColor: Color.fromRGBO(245, 245, 245, 255),
+              iosNavigationTitleColor: Colors.black)
+          .then((r) {
+        print('startChat finished');
+      }).catchError((e) {
+        print('error $e');
+      });
+    });
+  });
 }
