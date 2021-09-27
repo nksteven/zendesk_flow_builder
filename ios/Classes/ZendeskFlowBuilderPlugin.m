@@ -61,23 +61,24 @@
 
       UIViewController *viewController;
       viewController = [ZDKMessaging.instance messagingViewController];
-      // Present view controller
-      [navVc pushViewController:viewController animated:YES];
+      if (viewController != NULL) {
+          // Present view controller
+          [navVc pushViewController:viewController animated:YES];
 
+          UIViewController *rootVc = [UIApplication sharedApplication].keyWindow.rootViewController ;
+          [rootVc presentViewController:navVc
+                               animated:true
+                             completion:^{
+              UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", comment: @"")
+                                                                       style:UIBarButtonItemStylePlain
+                                                                      target:self
+                                                                      action:@selector(close:)];
+              [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: navigationTitleUIColor} forState:UIControlStateNormal];
 
-      UIViewController *rootVc = [UIApplication sharedApplication].keyWindow.rootViewController ;
-      [rootVc presentViewController:navVc
-                           animated:true
-                         completion:^{
-                             UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", comment: @"")
-                                                                                      style:UIBarButtonItemStylePlain
-                                                                                     target:self
-                                                                                     action:@selector(close:)];
-          [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: navigationTitleUIColor} forState:UIControlStateNormal];
-
-          navVc.topViewController.navigationItem.leftBarButtonItem = back;
-
-                         }];
+              navVc.topViewController.navigationItem.leftBarButtonItem = back;
+              
+          }];
+      }
 
     result(@(true));
   } else if ([@"version" isEqualToString:call.method]) {
