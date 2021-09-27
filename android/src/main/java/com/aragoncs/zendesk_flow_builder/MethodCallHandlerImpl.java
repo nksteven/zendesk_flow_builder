@@ -121,7 +121,7 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
     }
 
 
-    private void handleInit(MethodCall call, MethodChannel.Result result) {
+    private void handleInit(final MethodCall call, final MethodChannel.Result result) {
         Logger.setLoggable(true);
         String channelKey=call.argument("channelKey").toString();
         Messaging.initialize(
@@ -130,16 +130,23 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
                 new SuccessCallback<Messaging>() {
                     @Override
                     public void onSuccess(Messaging value) {
+                        setPreChatForm(call);
+                        result.success(true);
                         android.util.Log.i("IntegrationApplication", "Initialization successful");
                     }
                 },
                 new FailureCallback<MessagingError>() {
                     @Override
                     public void onFailure(@Nullable MessagingError cause) {
+                        setPreChatForm(call);
+                        result.success(false);
                         // Tracking the cause of exceptions in your crash reporting dashboard will help to triage any unexpected failures in production
                         android.util.Log.e("IntegrationApplication", "Messaging failed to initialize", cause);
                     }
                 });
+    }
+
+    private void setPreChatForm(MethodCall call){
         PreChatForm defaultPreChat = new PreChatForm.Builder()
                 .name(PreChatForm.Field.OPTIONAL)
                 .email(PreChatForm.Field.OPTIONAL)
@@ -155,8 +162,8 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
             zopimConfig.visitorPathOne((String) call.argument("appName"));
         }
         zopimConfig.preChatForm(defaultPreChat);
-        result.success(true);
     }
+
 
     public void getInitCountMessage(){
         initCount= LivechatChatLogPath.getInstance().countMessages(new ChatLog.Type[]{ChatLog.Type.CHAT_MSG_AGENT});
