@@ -24,12 +24,17 @@
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"init" isEqualToString:call.method]) {
+      NSNumber *counter = [NSNumber numberWithInt: 1];
+      [[NSUserDefaults standardUserDefaults] setObject: counter forKey:@"zendesk_counter"];
+      [[NSUserDefaults standardUserDefaults] synchronize];
       [ZDKMessaging initializeWithChannelKey:call.arguments[@"channelKey"]
                                   completionHandler:^(ZDKMessaging * _Nullable messaging, NSError * _Nullable error) {
                   // Tracking the error from initialization failures in your crash
                   // reporting dashboard will help to triage any unexpected failures in production
                  if (error != nil) {
                      NSLog(@"Messaging did not initialize.\nError: %@", error.localizedDescription);
+                 } else {
+                     NSLog(@"Messaging did  initialize.");
                  }
              }];
     result(@(true));
@@ -39,7 +44,6 @@
   } else if ([@"startChat" isEqualToString:call.method]) {
       NSNumber *navigationBarColor = call.arguments[@"iosNavigationBarColor"];
       NSNumber *navigationTitleColor = call.arguments[@"iosNavigationTitleColor"];
-      UIColor *navigationTitleUIColor = UIColor.whiteColor;
 
       UINavigationController *navVc = [[UINavigationController alloc] init];
       navVc.navigationBar.translucent = YES;
@@ -59,26 +63,7 @@
                                                                };
       }
 
-      UIViewController *viewController;
-      viewController = [ZDKMessaging.instance messagingViewController];
-      if (viewController != NULL) {
-          // Present view controller
-          [navVc pushViewController:viewController animated:YES];
-
-          UIViewController *rootVc = [UIApplication sharedApplication].keyWindow.rootViewController ;
-          [rootVc presentViewController:navVc
-                               animated:true
-                             completion:^{
-              UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", comment: @"")
-                                                                       style:UIBarButtonItemStylePlain
-                                                                      target:self
-                                                                      action:@selector(close:)];
-              [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: navigationTitleUIColor} forState:UIControlStateNormal];
-
-              navVc.topViewController.navigationItem.leftBarButtonItem = back;
-              
-          }];
-      }
+      [self start_chat:navVc];
 
     result(@(true));
   } else if ([@"version" isEqualToString:call.method]) {
@@ -91,6 +76,43 @@
   } else {
     result(FlutterMethodNotImplemented);
   }
+}
+
+- (void)start_chat:(UINavigationController *)navVc {
+    UIColor *navigationTitleUIColor = UIColor.whiteColor;
+    UIViewController *viewController = NULL;
+        viewController = [ZDKMessaging.instance messagingViewController];
+        if (viewController != NULL) {
+            // Present view controller
+            [navVc pushViewController:viewController animated:YES];
+
+            UIViewController *rootVc = [UIApplication sharedApplication].keyWindow.rootViewController ;
+            [rootVc presentViewController:navVc
+                                 animated:true
+                               completion:^{
+                UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Back", comment: @"")
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(close:)];
+                [back setTitleTextAttributes:@{ NSForegroundColorAttributeName: navigationTitleUIColor} forState:UIControlStateNormal];
+
+                navVc.topViewController.navigationItem.leftBarButtonItem = back;
+                
+            }];
+        } else {
+            NSNumber *counter = [[NSUserDefaults standardUserDefaults] objectForKey:@"zendesk_counter"];
+            int counter_int = counter.intValue;
+            NSLog(@"----start_chat------%d", counter_int);
+            if (counter_int <= 10) {
+                [self performSelector:@selector(start_chat:) withObject:navVc afterDelay:1.5];
+                counter = [NSNumber numberWithInt: counter_int + 1];
+            } else {
+                counter = [NSNumber numberWithInt: 1];
+            }
+            [[NSUserDefaults standardUserDefaults] setObject: counter forKey:@"zendesk_counter"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+        }
 }
 
 - (void)close:(id)sender {
