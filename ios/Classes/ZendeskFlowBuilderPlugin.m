@@ -99,6 +99,9 @@
                 navVc.topViewController.navigationItem.leftBarButtonItem = back;
                 
             }];
+            NSNumber *counter = [NSNumber numberWithInt: 1];
+            [[NSUserDefaults standardUserDefaults] setObject: counter forKey:@"zendesk_counter"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
         } else {
             NSNumber *counter = [[NSUserDefaults standardUserDefaults] objectForKey:@"zendesk_counter"];
             int counter_int = counter.intValue;
