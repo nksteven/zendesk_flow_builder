@@ -8,6 +8,7 @@
 //#import <ZendeskCoreSDK/ZendeskCoreSDK.h>
 //#import <SupportSDK/SupportSDK.h>
 #import <ZendeskSDKMessaging/ZendeskSDKMessaging.h>
+#import <ZendeskSDK/ZendeskSDK.h>
 
 
 #define ARGB_COLOR(c) [UIColor colorWithRed:((c>>16)&0xFF)/255.0 green:((c>>8)&0xFF)/255.0 blue:((c)&0xFF)/255.0  alpha:((c>>24)&0xFF)/255.0]
@@ -27,8 +28,8 @@
       NSNumber *counter = [NSNumber numberWithInt: 1];
       [[NSUserDefaults standardUserDefaults] setObject: counter forKey:@"zendesk_counter"];
       [[NSUserDefaults standardUserDefaults] synchronize];
-      [ZDKMessaging initializeWithChannelKey:call.arguments[@"channelKey"]
-                                  completionHandler:^(ZDKMessaging * _Nullable messaging, NSError * _Nullable error) {
+      [Zendesk initializeWithChannelKey:call.arguments[@"channelKey"] messagingFactory:[[ZDKDefaultMessagingFactory alloc] init]
+                                  completionHandler:^(Zendesk * _Nullable zendesk, NSError * _Nullable error) {
                   // Tracking the error from initialization failures in your crash
                   // reporting dashboard will help to triage any unexpected failures in production
                  if (error != nil) {
@@ -81,7 +82,7 @@
 - (void)start_chat:(UINavigationController *)navVc {
     UIColor *navigationTitleUIColor = UIColor.whiteColor;
     UIViewController *viewController = NULL;
-        viewController = [ZDKMessaging.instance messagingViewController];
+        viewController = [Zendesk.instance.messaging messagingViewController];
         if (viewController != NULL) {
             // Present view controller
             [navVc pushViewController:viewController animated:YES];
