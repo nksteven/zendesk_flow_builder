@@ -3,17 +3,17 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
-typedef Future<dynamic> UnReadListener(int unRead);
+typedef Future<dynamic> UnReadListener(int? unRead);
 
 class ZendeskFlowBuilder {
   static const MethodChannel _channel =
   const MethodChannel('zendesk_flow_builder');
 
-  UnReadListener _unReadListener;
+  UnReadListener? _unReadListener;
 
   Future<void> init(String accountKey,String channelKey,
-      {String department, String appName}) async {
-    await _channel.invokeMethod('init', <String, String>{
+      {String? department, String? appName}) async {
+    await _channel.invokeMethod('init', <String, String?>{
       'accountKey': accountKey,
       'channelKey': channelKey,
       'department': department,
@@ -22,8 +22,8 @@ class ZendeskFlowBuilder {
   }
 
   Future<void> setVisitorInfo(
-      {String name, String email, String phoneNumber, String note}) async {
-    await _channel.invokeMethod('setVisitorInfo', <String, String>{
+      {String? name, String? email, String? phoneNumber, String? note}) async {
+    await _channel.invokeMethod('setVisitorInfo', <String, String?>{
       'name': name,
       'email': email,
       'phoneNumber': phoneNumber,
@@ -38,8 +38,8 @@ class ZendeskFlowBuilder {
   }
 
   Future<void> startChat({
-    Color iosNavigationBarColor,
-    Color iosNavigationTitleColor,
+    Color? iosNavigationBarColor,
+    Color? iosNavigationTitleColor,
   }) async {
     await _channel.invokeMethod('startChat', {
       'iosNavigationBarColor': iosNavigationBarColor?.value,
@@ -51,19 +51,19 @@ class ZendeskFlowBuilder {
     await _channel.invokeMethod('endChat');
   }
 
-  Future<bool> checkSystemAlertPermission() async {
+  Future<bool?> checkSystemAlertPermission() async {
     return _channel.invokeMethod<bool>('checkSystemAlertPermission');
   }
 
-  Future<String> closeSystemAlert() async {
+  Future<String?> closeSystemAlert() async {
     return _channel.invokeMethod<String>('closeChatWidget');
   }
 
-  Future<String> openSystemAlert() async {
+  Future<String?> openSystemAlert() async {
     return _channel.invokeMethod<String>('openSystemAlert');
   }
 
-  Future<String> version() async {
+  Future<String?> version() async {
     return _channel.invokeMethod<String>('version');
   }
 
@@ -75,9 +75,9 @@ class ZendeskFlowBuilder {
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case "UnreadListener":
-        int unRead = call.arguments;
+        int? unRead = call.arguments;
         if (_unReadListener != null) {
-          _unReadListener(unRead);
+          _unReadListener!(unRead);
         }
     }
   }
