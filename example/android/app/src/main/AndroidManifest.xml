@@ -10,7 +10,7 @@
     <uses-sdk tools:overrideLibrary="zendesk.messaging,zendesk.conversationkit.android,zendesk.ui.android,zendesk.storage.android"/>
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="zendesk_flow_builder_example"
         android:icon="@mipmap/ic_launcher">
         <activity
