@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
@@ -7,11 +6,11 @@ typedef Future<dynamic> UnReadListener(int? unRead);
 
 class ZendeskFlowBuilder {
   static const MethodChannel _channel =
-  const MethodChannel('zendesk_flow_builder');
+      const MethodChannel('zendesk_flow_builder');
 
   UnReadListener? _unReadListener;
 
-  Future<void> init(String accountKey,String channelKey,
+  Future<void> init(String accountKey, String channelKey,
       {String? department, String? appName}) async {
     await _channel.invokeMethod('init', <String, String?>{
       'accountKey': accountKey,
@@ -84,8 +83,8 @@ class ZendeskFlowBuilder {
 
   Future<void> onReceiveMessage(String data) async {
     print("flutter:onReceiveMessage");
-    await _channel.invokeMethod('onReceivedChatMessage',{
-      "data":data,
+    await _channel.invokeMethod('onReceivedChatMessage', {
+      "data": data,
     });
   }
 }
