@@ -97,7 +97,7 @@ Future<void> initZendesk({String defaultInputFieldValue = ""}) async {
     appName: 'NTFoods App',
   )
       .then((r) {
-    zendesk.addUnreadListener((count) {});
+    zendesk.addUnreadListener((unRead) => Future(() => null));
   }).catchError((e) {
     print('failed with error $e');
   });
