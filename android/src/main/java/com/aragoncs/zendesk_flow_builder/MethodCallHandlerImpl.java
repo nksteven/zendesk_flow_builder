@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import zendesk.logger.Logger;
@@ -35,6 +35,7 @@ import zendesk.messaging.android.FailureCallback;
 import zendesk.messaging.android.Messaging;
 import zendesk.messaging.android.MessagingError;
 import zendesk.messaging.android.SuccessCallback;
+import zendesk.messaging.android.push.PushNotifications;
 
 public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
 
@@ -204,7 +205,8 @@ public class MethodCallHandlerImpl implements MethodChannel.MethodCallHandler {
         if (call.hasArgument("firebase_token")) {
             if(call.argument("firebase_token")!=null&&call.argument("firebase_token")!=""){
                 Log.d("firebase_token","firebasetoken="+call.argument("firebase_token").toString());
-                ZopimChat.setPushToken((String) call.argument("firebase_token"));
+//                ZopimChat.setPushToken((String) call.argument("firebase_token"));
+                PushNotifications.updatePushNotificationToken((String) call.argument("firebase_token"));
             }
         }
         result.success(true);
