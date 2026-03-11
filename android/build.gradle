@@ -24,6 +24,7 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'com.aragoncs.zendesk_flow_builder'
     compileSdkVersion 33
 
     defaultConfig {

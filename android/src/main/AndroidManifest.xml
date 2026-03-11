@@ -1,3 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
   package="com.aragoncs.zendesk_flow_builder">
+  <application>
+      <activity android:name="com.zopim.android.sdk.prechat.ZopimChatActivity"
+          android:exported="true"
+          tools:node="merge" />
+  </application>
 </manifest>
